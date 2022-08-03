@@ -22,36 +22,12 @@
 [org 0x7c00]        ; organize from 0x7C00 memory location where BIOS will load us
 
 start:              ; start label from where our code starts
-	xor ax,ax           ; set ax register to 0
-	mov ds,ax           ; set data segment(ds) to 0
-	mov es,ax           ; set extra segment(es) to 0
-	mov bx,0x8000
+	mov si, hello_world              ; point hello_world to source index
+	call print_string				       ; call print different color string function
 
-	mov si, MSG_REAL_MODE		; point MSG_REAL_MODE to source index register
-	call print_string				; call print different color string function
-
-	call switch_to_pm				; switch to the 32-bit protected mode
+	hello_world db 'Fuck the world!', 13, 10, 0
 
 %include "boot/print_string.asm"
-%include "boot/gdt.asm"
-%include "boot/disk_load.asm"
-%include "boot/print_string_pm.asm"
-%include "boot/switch_to_pm.asm"
-
-[bits 32]
-; This is where we arrive after switching to and initialising protected mode.
-BEGIN_PM:
-	mov ebx , MSG_PROT_MODE
-	call print_string_pm ; Use our 32-bit print routine.
-	jmp $          ;an infinite loop!! ($ evaluates as the current 
-						;                     position just before the 
-						;                     instruction is assembled, 
-						;                     that is, the position where 
-						;                     the JMP instruction begins)
-
-; Global variables
-MSG_REAL_MODE db " Started in 16-bit Real Mode ", 0
-MSG_PROT_MODE db " Successfully landed in 32-bit Protected Mode ", 0
 
 times (510 - ($ - $$)) db 0x00     ;set 512 bytes for boot sector which are necessary
 dw 0xAA55                           						   ; boot signature 0xAA & 0x55

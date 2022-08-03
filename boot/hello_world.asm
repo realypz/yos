@@ -34,6 +34,7 @@ start:              ; start label from where our code starts
 
 %include "boot/print_string.asm"
 %include "boot/gdt.asm"
+%include "boot/disk_load.asm"
 %include "boot/print_string_pm.asm"
 %include "boot/switch_to_pm.asm"
 

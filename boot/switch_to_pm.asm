@@ -30,3 +30,14 @@ init_pm:
    mov esp, ebp         ; at the top of the free space.
 
    call BEGIN_PM ; Finally, call some well-known label
+
+; This is where we arrive after switching to and initialising protected mode.
+BEGIN_PM:
+	mov ebx, MSG_PROT_MODE
+	call print_string_pm    ; Use our 32-bit print routine.
+	call KERNEL_OFFSET	; Jump to the C function in kernel.c.
+	jmp $          ;an infinite loop!! ($ evaluates as the current 
+						;                     position just before the 
+						;                     instruction is assembled, 
+						;                     that is, the position where 
+						;                     the JMP instruction begins)

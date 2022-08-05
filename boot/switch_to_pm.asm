@@ -35,9 +35,9 @@ init_pm:
 BEGIN_PM:
 	mov ebx, MSG_PROT_MODE
 	call print_string_pm    ; Use our 32-bit print routine.
-	call KERNEL_OFFSET	; Jump to the C function in kernel.c.
-	jmp $          ;an infinite loop!! ($ evaluates as the current 
-						;                     position just before the 
-						;                     instruction is assembled, 
-						;                     that is, the position where 
-						;                     the JMP instruction begins)
+	call KERNEL_OFFSET      ; Call void main() in kernel/kernel.c.
+	jmp $                   ;an infinite loop!! ($ evaluates as the current 
+                              ;                     position just before the 
+                              ;                     instruction is assembled, 
+                              ;                     that is, the position where 
+                              ;                     the JMP instruction begins)

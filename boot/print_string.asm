@@ -1,3 +1,4 @@
+[bits 16]
 print_string:
 	mov ah, 0x0E            ; function number = 0Eh: Display Character
 

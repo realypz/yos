@@ -11,12 +11,12 @@
 ; nasm -f bin boot/boot_sector.asm -o output/boot_sector.bin
 
 ; ## To run in qemu in Linux
-; qemu-system-x86_64 output/boot_sector.bin
+; qemu-system-i386 -nographic output/boot_sector.bin
 
 ; ## To run it in Windows
 ; 1. Download the bin file to Windows folder.
 ; 2. In cmd (not PowerShell)
-;    "C:\Program Files\qemu\qemu-system-x86_64.exe" "\\wsl$\Ubuntu-20.04-ypz\home\realypz\ypz\yos\output\os-image"
+;    "C:\Program Files\qemu\qemu-system-i386.exe" "\\wsl$\Ubuntu-20.04-ypz\home\realypz\ypz_code\yos\output\os-image"
 ;
 ; Run ```bash build.sh``` to quickly generate the image of yos.
 
@@ -41,7 +41,6 @@ start:              ; start label from where our code starts
 %include "boot/print_string.asm"
 %include "boot/gdt.asm"
 %include "boot/load_kernel.asm"
-%include "boot/disk_load.asm"
 %include "boot/print_string_pm.asm"
 %include "boot/switch_to_pm.asm"
 

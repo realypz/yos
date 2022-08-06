@@ -1,22 +1,29 @@
+KERNEL_OFFSET equ 0x1000 ; This is the memory offset to which we will load our kernel
+
 [bits 16]
 load_kernel:
 	mov si, MSG_LOAD_KERNEL 	; Print a message to say we are loading the kernel
 	call print_string
 
 	mov dh, 15 						; that we load the first 15 sectors (excluding
-	mov dl, [BOOT_DRIVE] 		; the boot sector) from the boot disk (i.e. our
+	
 
    push dx           ; Store DX on stack so later we can recall
                      ; how many sectors were request to be read ,
                      ; even if it is altered in the meantime
-   mov ah , 0x02     ; BIOS read sector function
+
+   ; Set the following 7 registers for interrupt 13h: low level disk service.
+   ; https://en.wikipedia.org/wiki/INT_13H
+   mov ah , 0x02     ; INT 13h AH=02h: Read Sectors From Drive
    mov al , dh       ; Read DH sectors
    mov ch , 0x00     ; Select cylinder 0
-   mov dh , 0x00     ; Select head 0
    mov cl , 0x02     ; Start reading from second sector (i.e.
                      ; after the boot sector)
+   mov dh , 0x00     ; Select head 0
+   mov dl, [BOOT_DRIVE] 		; the boot sector) from the boot disk.
 	mov bx, KERNEL_OFFSET 		; Set-up parameters for our disk_load routine, so
-   int 0x13          ; BIOS interrupt
+
+   int 0x13          ; Call BIOS interrupt 13: low level disk service.
 
    jc disk_error     ; Jump if error (i.e. carry flag set)
 
@@ -30,5 +37,4 @@ disk_error:
    call print_string
    jmp $
 
-; Variables
 DISK_ERROR_MSG db " Disk read error !", 0

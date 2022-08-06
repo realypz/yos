@@ -9,7 +9,7 @@ switch_to_pm:
                            ; the protected mode segments ( e.g. for code and data )
    mov eax, cr0            ; To make the switch to protected mode, we set
    or eax, 0x1             ; the first bit of CR0, a control register
-   mov cr0, eax
+   mov cr0, eax            ; After this instruction, we get into 32-bit protected mode.
 
    jmp CODE_SEG:init_pm    ; Make a far jump ( i.e. to a new segment ) to our 32-bit
                            ; code. This also forces the CPU to flush its cache of

@@ -40,5 +40,8 @@ kernel.bin: kernel_entry.o kernel.o
 os-image: boot_sector.bin kernel.bin
 	cat ${OUTPUT_DIR}/boot_sector.bin ${OUTPUT_DIR}/kernel.bin > ${OUTPUT_DIR}/os-image
 
+run: os-image
+	 qemu-system-i386 -fda ${OUTPUT_DIR}/os-image
+
 clean:
 	rm -f ${OUTPUT_DIR}/*

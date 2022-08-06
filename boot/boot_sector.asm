@@ -1,19 +1,27 @@
 [bits 16]           ; tell assembler that working in real mode(16 bit mode)
 [org 0x7c00]        ; organize from 0x7C00 memory location where BIOS will load us
-KERNEL_OFFSET equ 0x1000 ; This is the memory offset to which we will load our kernel
+
+jmp 0x0: start		  ; Make a far jump to explicitly set CS register to 0x0.
 
 start:              ; start label from where our code starts
 	mov [BOOT_DRIVE], dl	 		; BIOS stores our boot drive in DL, so it 's
 										; best to remember this for later.
 
-	mov bp , 0x9000 				; Set-up the stack.
-	mov sp , bp
+	; Initalize segment registers
+	mov bp, 0x0007FFF0 			; Set up the base pointer and stack pointer.
+	mov sp, bp						; Refer to https://wiki.osdev.org/Memory_Map_(x86)
+										; to make sure the stack memory does not overwrite
+										; the unusable memory.	
+	mov ax, 0x0
+	mov ss, ax						; Set up stack segment register.
+	mov ds, ax
+	mov es, ax
 
 	mov si, MSG_REAL_MODE		; point MSG_REAL_MODE to source index register
 	call print_string				; call print different color string function
 
-	call load_kernel
-
+	call load_kernel				; Load the kernel from disk. The kernel code is beyond the
+										; first sector (first 512 bytes), and B
 	call switch_to_pm				; switch to the 32-bit protected mode
 
 %include "boot/print_string.asm"

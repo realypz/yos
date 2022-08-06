@@ -1,10 +1,11 @@
-# Run the following commands to generate the os image.
-# ```output/os-image``` is what you need.
+# set(${OUTPUT_DIR} "output")
+OUTPUT_DIR = "output"
 
-mkdir -p output/
+_create_output_dir:
+	mkdir -p ${OUTPUT_DIR}/
 
-# Build boot sector
-nasm -f bin boot/boot_sector.asm -o output/boot_sector.bin
+boot_sector.bin: _create_output_dir
+	nasm -f bin boot/boot_sector.asm -o ${OUTPUT_DIR}/boot_sector.bin
 
 # Build your own C function to the object file.
 #
@@ -17,20 +18,27 @@ nasm -f bin boot/boot_sector.asm -o output/boot_sector.bin
 # -g: Produce debugging information in the operating system’s native format.
 # -o1: the optimization level.
 # -fno-PIE: ??? https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#Code-Gen-Options
-gcc -m32 -fno-PIE -Wextra -Wall -ffreestanding -c kernel/kernel.c -o output/kernel.o
+kernel.o: _create_output_dir
+	gcc -m32 -fno-PIE -Wextra -Wall -ffreestanding -c kernel/kernel.c -o ${OUTPUT_DIR}/kernel.o
 
 # -f elf64
 # -f elf32
-nasm -f elf32 kernel/kernel_entry.asm -o output/kernel_entry.o
+kernel_entry.o: _create_output_dir
+	nasm -f elf32 kernel/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
 
 # Pass kernel_entry.o and kernel.o to a linker.
 # The linkage order is strictly as the order in the command.
 # --oformat=elf32-i386
 # -m elf_i386
 # -no-pie: ??? https://github.com/cfenollosa/os-tutorial/issues/16
-ld -m elf_i386 -no-pie -o output/kernel.bin\
- -Ttext 0x1000 output/kernel_entry.o output/kernel.o\
- --oformat=binary
+kernel.bin: kernel_entry.o kernel.o
+	ld -m elf_i386 -no-pie -o ${OUTPUT_DIR}/kernel.bin\
+	 -Ttext 0x1000 ${OUTPUT_DIR}/kernel_entry.o ${OUTPUT_DIR}/kernel.o\
+	 --oformat=binary
 
 # Concatenate two binary file into one.
-cat output/boot_sector.bin output/kernel.bin > output/os-image
+os-image: boot_sector.bin kernel.bin
+	cat ${OUTPUT_DIR}/boot_sector.bin ${OUTPUT_DIR}/kernel.bin > ${OUTPUT_DIR}/os-image
+
+clean:
+	rm -f ${OUTPUT_DIR}/*

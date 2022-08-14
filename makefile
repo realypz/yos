@@ -19,20 +19,20 @@ boot_sector.bin: _create_output_dir
 # -o1: the optimization level.
 # -fno-PIE: ??? https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#Code-Gen-Options
 kernel.o: _create_output_dir
-	gcc -m32 -fno-PIE -Wextra -Wall -ffreestanding -c kernel/kernel.c -o ${OUTPUT_DIR}/kernel.o
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -c kernel/kernel.c -o ${OUTPUT_DIR}/kernel.o
 
 # -f elf64
 # -f elf32
 kernel_entry.o: _create_output_dir
-	nasm -f elf32 kernel/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
+	nasm -f elf64 kernel/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
 
 # Pass kernel_entry.o and kernel.o to a linker.
 # The linkage order is strictly as the order in the command.
 # --oformat=elf32-i386
-# -m elf_i386
+# -m elf_x86_64
 # -no-pie: ??? https://github.com/cfenollosa/os-tutorial/issues/16
 kernel.bin: kernel_entry.o kernel.o
-	ld -m elf_i386 -no-pie -o ${OUTPUT_DIR}/kernel.bin\
+	ld -m elf_x86_64 -no-pie -o ${OUTPUT_DIR}/kernel.bin\
 	 -Ttext 0x1000 ${OUTPUT_DIR}/kernel_entry.o ${OUTPUT_DIR}/kernel.o\
 	 --oformat=binary
 
@@ -41,7 +41,7 @@ os-image: boot_sector.bin kernel.bin
 	cat ${OUTPUT_DIR}/boot_sector.bin ${OUTPUT_DIR}/kernel.bin > ${OUTPUT_DIR}/os-image
 
 run: os-image
-	 qemu-system-i386 -fda ${OUTPUT_DIR}/os-image
+	 qemu-system-x86_64 -fda ${OUTPUT_DIR}/os-image
 
 clean:
 	rm -f ${OUTPUT_DIR}/*

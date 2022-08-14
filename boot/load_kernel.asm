@@ -2,11 +2,7 @@ KERNEL_OFFSET equ 0x1000 ; This is the memory offset to which we will load our k
 
 [bits 16]
 load_kernel:
-	mov si, MSG_LOAD_KERNEL 	; Print a message to say we are loading the kernel
-	call print_string
-
 	mov dh, 15 						; that we load the first 15 sectors (excluding
-	
 
    push dx           ; Store DX on stack so later we can recall
                      ; how many sectors were request to be read ,
@@ -33,8 +29,6 @@ load_kernel:
    ret
 
 disk_error:
-   mov bx , DISK_ERROR_MSG
-   call print_string
    jmp $
 
 DISK_ERROR_MSG db " Disk read error !", 0

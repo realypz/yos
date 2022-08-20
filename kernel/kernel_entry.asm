@@ -1,7 +1,8 @@
 [bits 64]
 [extern main]
-[global _start]
+[global kernel_start]
 
-_start:
-   call main
-   jmp $
+section .kernel_entry
+   kernel_start:
+      call main
+      jmp $

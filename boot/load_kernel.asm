@@ -1,5 +1,3 @@
-KERNEL_OFFSET equ 0x1000 ; This is the memory offset to which we will load our kernel
-
 [bits 16]
 load_kernel:
 	mov dh, 15 						; that we load the first 15 sectors (excluding

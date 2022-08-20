@@ -32,9 +32,8 @@ kernel_entry.o: _create_output_dir
 # -m elf_x86_64
 # -no-pie: ??? https://github.com/cfenollosa/os-tutorial/issues/16
 kernel.bin: kernel_entry.o kernel.o
-	ld -m elf_x86_64 -no-pie -o ${OUTPUT_DIR}/kernel.bin\
-	 -Ttext 0x1000 ${OUTPUT_DIR}/kernel_entry.o ${OUTPUT_DIR}/kernel.o\
-	 --oformat=binary
+	ld -T kernel/linker.ld  ${OUTPUT_DIR}/kernel.o ${OUTPUT_DIR}/kernel_entry.o \
+	   -o ${OUTPUT_DIR}/kernel.bin
 
 # Concatenate two binary file into one.
 os-image: boot_sector.bin kernel.bin

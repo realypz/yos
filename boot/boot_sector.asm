@@ -3,6 +3,8 @@
 
 %define BOOT_DRIVE 0
 
+%define KERNEL_OFFSET 0x1000 ; This is the memory offset to which we will load our kernel
+
 start:
 jmp 0x0:.FlushCS		  ; Make a far jump to explicitly set CS register to 0x0.
 

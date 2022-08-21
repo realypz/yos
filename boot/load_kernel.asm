@@ -1,6 +1,8 @@
 [bits 16]
+section .text
+
 load_kernel:
-	mov dh, 15 						; that we load the first 15 sectors (excluding
+	mov dh, 15        ; load the first 15 sectors. This value can be 53 at max.
 
    push dx           ; Store DX on stack so later we can recall
                      ; how many sectors were request to be read ,
@@ -29,4 +31,5 @@ load_kernel:
 disk_error:
    jmp $
 
+section .rodata
 DISK_ERROR_MSG db " Disk read error !", 0

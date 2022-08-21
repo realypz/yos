@@ -4,8 +4,13 @@ OUTPUT_DIR = "output"
 _create_output_dir:
 	mkdir -p ${OUTPUT_DIR}/
 
-boot_sector.bin: _create_output_dir
-	nasm -f bin boot/boot_sector.asm -o ${OUTPUT_DIR}/boot_sector.bin
+boot_sector.o: _create_output_dir
+	nasm -f elf64 boot/boot_sector.asm -o ${OUTPUT_DIR}/boot_sector.o
+
+boot_sector.bin: boot_sector.o
+	ld -T boot/linker.ld ${OUTPUT_DIR}/boot_sector.o -o ${OUTPUT_DIR}/boot_sector.bin
+
+
 
 # Build your own C function to the object file.
 #

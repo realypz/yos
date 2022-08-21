@@ -5,7 +5,9 @@
  
 %define CODE_SEG     0x0008
 %define DATA_SEG     0x0010
- 
+
+
+section .text
 ALIGN 4
 IDT:
    .Length       dw 0
@@ -130,13 +132,15 @@ LongMode:
     mov rax, MSG_LONG_MODE
     call printString
 
-    call KERNEL_OFFSET
- 
+    ; TODO: Why cannot write `call KERNEL_OFFSET` directly?
+    ; Might becasue of `Direct Far Call` is disabled in 64-bit mode.
+    mov rbx, KERNEL_OFFSET
+    call rbx
+
 .halt:
    hlt
    jmp LongMode.halt
 
-MSG_LONG_MODE DB "long mode :)))", 0
 
 printString:
     mov edi, 0xB8000
@@ -160,3 +164,6 @@ LoopString:
 
 PrintDone:
     ret
+
+section .rodata
+MSG_LONG_MODE DB "long mode :)))", 0

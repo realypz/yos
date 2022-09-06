@@ -43,6 +43,7 @@ kernel.bin: kernel_entry.o kernel.o
 # Concatenate two binary file into one.
 os-image: boot_sector.bin kernel.bin
 	cat ${OUTPUT_DIR}/boot_sector.bin ${OUTPUT_DIR}/kernel.bin > ${OUTPUT_DIR}/os-image
+	dd if=${OUTPUT_DIR}/os-image of=${OUTPUT_DIR}/os-image.img bs=512 count=1 conv=notrunc
 
 run: os-image
 	 qemu-system-x86_64 -fda ${OUTPUT_DIR}/os-image

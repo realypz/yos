@@ -1,2 +1,5 @@
 .vscode/
 output/
+.debug/
+.log/
+bx_enh_dbg.ini

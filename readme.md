@@ -6,3 +6,11 @@ This document won't be finalized now.
 make run
 # If GUI is not supported, then add '-nographic' flag.
 ```
+
+
+## Run in bochs
+```
+bochs
+
+# You might need to install bochs and other dependencies to run bochs.
+```

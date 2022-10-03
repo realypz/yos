@@ -23,26 +23,40 @@ boot_sector.bin: boot_sector.o
 # -g: Produce debugging information in the operating system’s native format.
 # -o1: the optimization level.
 # -fno-PIE: ??? https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#Code-Gen-Options
+# -I./ allows gcc to search the header files under the current directory ./
 kernel.o: _create_output_dir
-	gcc -fno-PIE -Wextra -Wall -ffreestanding -c kernel/kernel.c -o ${OUTPUT_DIR}/kernel.o
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/kernel.c -o ${OUTPUT_DIR}/kernel.o
 
 # -f elf64
 # -f elf32
 kernel_entry.o: _create_output_dir
-	nasm -f elf64 kernel/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
+	nasm -f elf64 kernel/src/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
+
+multiply.o: _create_output_dir
+	nasm -f elf64 kernel/src/multiply.asm -o ${OUTPUT_DIR}/multiply.o
+
+OBJS = \
+	${OUTPUT_DIR}/kernel.o \
+	${OUTPUT_DIR}/kernel_entry.o \
+	${OUTPUT_DIR}/multiply.o 
 
 # Pass kernel_entry.o and kernel.o to a linker.
 # The linkage order is strictly as the order in the command.
 # --oformat=elf32-i386
 # -m elf_x86_64
 # -no-pie: ??? https://github.com/cfenollosa/os-tutorial/issues/16
-kernel.bin: kernel_entry.o kernel.o
-	ld -T kernel/linker.ld  ${OUTPUT_DIR}/kernel.o ${OUTPUT_DIR}/kernel_entry.o \
+kernel.bin: kernel_entry.o kernel.o multiply.o
+	ld -T kernel/linker.ld  $(OBJS) \
 	   -o ${OUTPUT_DIR}/kernel.bin
+
+# The order below is important!
+BINARIES = \
+	${OUTPUT_DIR}/boot_sector.bin \
+	${OUTPUT_DIR}/kernel.bin
 
 # Concatenate two binary file into one.
 os-image: boot_sector.bin kernel.bin
-	cat ${OUTPUT_DIR}/boot_sector.bin ${OUTPUT_DIR}/kernel.bin > ${OUTPUT_DIR}/os-image
+	cat ${BINARIES} > ${OUTPUT_DIR}/os-image
 	dd if=${OUTPUT_DIR}/os-image of=${OUTPUT_DIR}/os-image.img bs=512 count=1 conv=notrunc
 
 run: os-image

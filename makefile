@@ -11,7 +11,6 @@ boot_sector.bin: boot_sector.o
 	ld -T boot/linker.ld ${OUTPUT_DIR}/boot_sector.o -o ${OUTPUT_DIR}/boot_sector.bin
 
 
-
 # Build your own C function to the object file.
 #
 # -ffreestanding: Assert that compilation targets a freestanding environment.
@@ -24,16 +23,19 @@ boot_sector.bin: boot_sector.o
 # -o1: the optimization level.
 # -fno-PIE: ??? https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#Code-Gen-Options
 # -I./ allows gcc to search the header files under the current directory ./
-kernel.o: _create_output_dir
-	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/kernel.c -o ${OUTPUT_DIR}/kernel.o
+
 
 # -f elf64
 # -f elf32
-kernel_entry.o: _create_output_dir
-	nasm -f elf64 kernel/src/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
+# nasm -f elf64 kernel/src/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
 
-multiply.o: _create_output_dir
+### Compile {
+kernel_objs: _create_output_dir
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/kernel.c -o ${OUTPUT_DIR}/kernel.o
+	nasm -f elf64 kernel/src/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
 	nasm -f elf64 kernel/src/multiply.asm -o ${OUTPUT_DIR}/multiply.o
+### }
+
 
 OBJS = \
 	${OUTPUT_DIR}/kernel.o \
@@ -45,7 +47,7 @@ OBJS = \
 # --oformat=elf32-i386
 # -m elf_x86_64
 # -no-pie: ??? https://github.com/cfenollosa/os-tutorial/issues/16
-kernel.bin: kernel_entry.o kernel.o multiply.o
+kernel.bin: kernel_objs
 	ld -T kernel/linker.ld  $(OBJS) \
 	   -o ${OUTPUT_DIR}/kernel.bin
 

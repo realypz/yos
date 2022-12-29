@@ -32,15 +32,26 @@ boot_sector.bin: boot_sector.o
 ### Compile {
 kernel_objs: _create_output_dir
 	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/kernel.c -o ${OUTPUT_DIR}/kernel.o
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/idt.c -o ${OUTPUT_DIR}/idt.o
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/keyboard.c -o ${OUTPUT_DIR}/keyboard.o
+
+	nasm -f elf64 kernel/src/io.asm -o ${OUTPUT_DIR}/io.o
 	nasm -f elf64 kernel/src/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
+	nasm -f elf64 kernel/src/keyboard_isr.asm -o ${OUTPUT_DIR}/keyboard_isr.o
 	nasm -f elf64 kernel/src/multiply.asm -o ${OUTPUT_DIR}/multiply.o
+	nasm -f elf64 kernel/src/load_idt_impl.asm -o ${OUTPUT_DIR}/load_idt_impl.o
 ### }
 
 
 OBJS = \
+	${OUTPUT_DIR}/io.o \
 	${OUTPUT_DIR}/kernel.o \
 	${OUTPUT_DIR}/kernel_entry.o \
-	${OUTPUT_DIR}/multiply.o 
+	${OUTPUT_DIR}/keyboard.o \
+	${OUTPUT_DIR}/keyboard_isr.o \
+	${OUTPUT_DIR}/multiply.o  \
+	${OUTPUT_DIR}/load_idt_impl.o \
+	${OUTPUT_DIR}/idt.o
 
 # Pass kernel_entry.o and kernel.o to a linker.
 # The linkage order is strictly as the order in the command.

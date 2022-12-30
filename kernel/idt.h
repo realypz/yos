@@ -21,6 +21,6 @@ typedef struct
     IDTEntry64* base;
 } __attribute__((packed)) IDTDescriptor;
 
-void __attribute__((cdecl)) initIDT();
+void __attribute__((cdecl)) init_idt();
 
 #endif /* KERNEL_IDT */

@@ -1,8 +1,8 @@
 [bits 64]
 
-global loadIDTImpl
+global load_idt
 
-loadIDTImpl:
+load_idt:
     ; push rbp
     ; mov rbp, rsp
     mov rax, rdi

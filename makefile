@@ -39,7 +39,7 @@ kernel_objs: _create_output_dir
 	nasm -f elf64 kernel/src/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
 	nasm -f elf64 kernel/src/keyboard_isr.asm -o ${OUTPUT_DIR}/keyboard_isr.o
 	nasm -f elf64 kernel/src/multiply.asm -o ${OUTPUT_DIR}/multiply.o
-	nasm -f elf64 kernel/src/load_idt_impl.asm -o ${OUTPUT_DIR}/load_idt_impl.o
+	nasm -f elf64 kernel/src/load_idt.asm -o ${OUTPUT_DIR}/load_idt.o
 ### }
 
 
@@ -50,7 +50,7 @@ OBJS = \
 	${OUTPUT_DIR}/keyboard.o \
 	${OUTPUT_DIR}/keyboard_isr.o \
 	${OUTPUT_DIR}/multiply.o  \
-	${OUTPUT_DIR}/load_idt_impl.o \
+	${OUTPUT_DIR}/load_idt.o \
 	${OUTPUT_DIR}/idt.o
 
 # Pass kernel_entry.o and kernel.o to a linker.

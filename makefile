@@ -31,29 +31,29 @@ boot_sector.bin: boot_sector.o
 
 ### Compile {
 kernel_objs: _create_output_dir
-	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/kernel.c -o ${OUTPUT_DIR}/kernel.o
-	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/idt.c -o ${OUTPUT_DIR}/idt.o
-	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/keyboard.c -o ${OUTPUT_DIR}/keyboard.o
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/src/main.c -o ${OUTPUT_DIR}/main.o
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/interrupt/idt.c -o ${OUTPUT_DIR}/idt.o
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/devices/keyboard.c -o ${OUTPUT_DIR}/keyboard.o
+	gcc -fno-PIE -Wextra -Wall -ffreestanding -I./ -c kernel/devices/pic.c -o ${OUTPUT_DIR}/pic.o
 
-	nasm -f elf64 kernel/src/io.asm -o ${OUTPUT_DIR}/io.o
+	nasm -f elf64 kernel/io/io.asm -o ${OUTPUT_DIR}/io.o
 	nasm -f elf64 kernel/src/kernel_entry.asm -o ${OUTPUT_DIR}/kernel_entry.o
-	nasm -f elf64 kernel/src/keyboard_isr.asm -o ${OUTPUT_DIR}/keyboard_isr.o
-	nasm -f elf64 kernel/src/multiply.asm -o ${OUTPUT_DIR}/multiply.o
-	nasm -f elf64 kernel/src/load_idt.asm -o ${OUTPUT_DIR}/load_idt.o
+	nasm -f elf64 kernel/interrupt/isr.asm -o ${OUTPUT_DIR}/isr.o
+	nasm -f elf64 kernel/interrupt/idt.asm -o ${OUTPUT_DIR}/idt_asm.o
 ### }
 
 
 OBJS = \
 	${OUTPUT_DIR}/io.o \
-	${OUTPUT_DIR}/kernel.o \
+	${OUTPUT_DIR}/main.o \
 	${OUTPUT_DIR}/kernel_entry.o \
 	${OUTPUT_DIR}/keyboard.o \
-	${OUTPUT_DIR}/keyboard_isr.o \
-	${OUTPUT_DIR}/multiply.o  \
-	${OUTPUT_DIR}/load_idt.o \
-	${OUTPUT_DIR}/idt.o
+	${OUTPUT_DIR}/isr.o \
+	${OUTPUT_DIR}/idt.o \
+	${OUTPUT_DIR}/idt_asm.o \
+	${OUTPUT_DIR}/pic.o
 
-# Pass kernel_entry.o and kernel.o to a linker.
+# Pass kernel_entry.o and main.o to a linker.
 # The linkage order is strictly as the order in the command.
 # --oformat=elf32-i386
 # -m elf_x86_64

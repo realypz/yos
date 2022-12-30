@@ -1,7 +1,16 @@
-#include "kernel/io.h"
+#include "kernel/devices/keyboard.h"
+
+#include "kernel/io/io.h"
+#include "kernel/devices/pic.h"
 
 #define KEYBOARD_DATA_PORT 0x60
 #define KEYBOARD_STATUS_PORT 0x64
+
+void init_keyboard()
+{
+	unsigned char curmask_master = inb(0x21);
+    outb(0x21, curmask_master & 0xFD);
+}
 
 // https://www.youtube.com/watch?v=QRhFo-CnpvQ&t=452s
 void keyboard_isr_handler()

@@ -1,0 +1,10 @@
+load("//tool_chains/bazel:c_rules.bzl", "yos_c_library")
+
+yos_c_library(
+    name = "io",
+    srcs = [], # TODO: Add io.asm to the library
+    hdrs = [
+        ":io.h",
+    ],
+    visibility = ["//visibility:public"],
+)

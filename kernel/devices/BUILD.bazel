@@ -1,0 +1,27 @@
+load("//tool_chains/bazel:c_rules.bzl", "yos_c_library")
+
+yos_c_library(
+    name = "pic",
+    srcs = [
+        ":pic.c",
+    ],
+    hdrs = [
+        ":pic.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+yos_c_library(
+    name = "keyboard",
+    srcs = [
+        ":keyboard.c",
+    ],
+    hdrs = [
+        ":keyboard.h",
+    ],
+    deps = [
+        ":pic",
+        "//kernel/io:io",
+    ],
+    visibility = ["//visibility:public"],
+)

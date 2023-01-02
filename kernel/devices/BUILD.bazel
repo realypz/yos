@@ -19,9 +19,9 @@ y_cc_library(
     hdrs = [
         ":keyboard.h",
     ],
+    visibility = ["//visibility:public"],
     deps = [
         ":pic",
-        "//kernel/io:io",
+        "//kernel/io",
     ],
-    visibility = ["//visibility:public"],
 )

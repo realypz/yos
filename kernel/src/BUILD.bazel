@@ -6,11 +6,11 @@ y_cc_binary(
         ":kernel_entry.asm",
         ":main.c",
     ],
+    linker_command_file = "//kernel:linker.ld",
+    visibility = ["//visibility:public"],
     deps = [
         "//kernel/devices:keyboard",
         "//kernel/devices:pic",
-        "//kernel/interrupt:interrupt",
+        "//kernel/interrupt",
     ],
-    linker_command_file = "//kernel:linker.ld",
-    visibility = ["//visibility:public"],
 )

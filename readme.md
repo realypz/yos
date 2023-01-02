@@ -3,7 +3,7 @@ This is a hobby project of playing with operating system. The development proces
 
 When you browse this repo
 
-# How to run?
+# How to run simulation?
 At the very begining, clone this repo to a Linux environment. My development environment is WSL2 on Windows 11.
 The built OS image is run on QEMU for testing purpose. It has never been tested on a real hardware.
 ## Option 1: via makefile.
@@ -45,3 +45,9 @@ This repo currently uses three comment markers.
 `MISC: ` is commented where the explanation is more of prior knowledge to understand the code, and less related to the code logic itself compared with `NOTE: `.
 
 `TODO: ` is commented where a fix or change will happen in the future.
+
+# Useful commands
+## Bazel buildifier
+```sh
+bazel run //tool_chains/bazel:buildifier
+```

@@ -16,7 +16,7 @@ def _y_os_image_impl(ctx):
     #       os_image does not have write permission, and this stops
     #       QEMU to load this image. Thus, an executable script that
     #       calls QEMU on this image is created when this bazel rule
-    #       is run. 
+    #       is run.
     exec_script = ctx.actions.declare_file(ctx.attr.name + ".sh")
     ctx.actions.write(
         exec_script,
@@ -24,9 +24,9 @@ def _y_os_image_impl(ctx):
 chmod +rwx $(realpath .)/{os_image_path}
 qemu-system-x86_64 -fda $(realpath .)/{os_image_path}
 """.format(
-        os_image_path = os_image.basename,
+            os_image_path = os_image.basename,
         ),
-        is_executable=True,
+        is_executable = True,
     )
 
     return [
@@ -42,12 +42,12 @@ y_os_image = rule(
         "bootloader": attr.label(
             mandatory = True,
             allow_single_file = True,
-            doc = "The bootloader binary."
+            doc = "The bootloader binary.",
         ),
         "kernel": attr.label(
             mandatory = True,
             allow_single_file = True,
-            doc = "The kernel binary."
+            doc = "The kernel binary.",
         ),
     },
     executable = True,

@@ -13,8 +13,8 @@ GCC_DEFAULT_ARGS = [
     "-Wall",
     "-ffreestanding",
     "-I./",
-    "-c",   # MISC: Compile or assemble the source files, but do not link.
-            # https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html
+    "-c",  # MISC: Compile or assemble the source files, but do not link.
+    # https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html
 ]
 C_CODE_EXTENSIONS = ["cpp", "c"]
 
@@ -23,8 +23,9 @@ C_CODE_EXTENSIONS = ["cpp", "c"]
 def _yos_c_library_impl(ctx):
     object_files_map = {
         file: ctx.actions.declare_file(file.basename + "." + ELF_EXTENSION)
-        for file in ctx.files.srcs if file.extension in
-        ASSEMBLY_CODE_EXTENSIONS + C_CODE_EXTENSIONS
+        for file in ctx.files.srcs
+        if file.extension in
+           ASSEMBLY_CODE_EXTENSIONS + C_CODE_EXTENSIONS
         # NOTE: Even this rule is called "y_cc_library",
         # assembly code is also supported!
     }
@@ -56,7 +57,7 @@ def _yos_c_library_impl(ctx):
     return [
         DefaultInfo(
             files = depset([obj_file for _, obj_file in object_files_map.items()] +
-            ctx.files.hdrs + ctx.files.deps),
+                           ctx.files.hdrs + ctx.files.deps),
         ),
     ]
     # Why add ctx.files.hdrs in the depset?
@@ -96,7 +97,9 @@ LINKER_DEFALT_ARGS = "-T"
 def _y_cc_binary_impl(ctx):
     binary_file = ctx.actions.declare_file(ctx.attr.name + "." + BINARY_EXTENSION)
 
-    objs_to_be_linked = [file for file in ctx.files.deps
+    objs_to_be_linked = [
+        file
+        for file in ctx.files.deps
         if file.extension == ELF_EXTENSION
     ]
 
@@ -121,13 +124,13 @@ def _y_cc_binary_impl(ctx):
             objs_to_be_linked.append(obj_file)
         else:
             fail, ctx.label.name + "has not supported types in srcs."
-    
+
     """ { Debug print
     print("Objects to be linked in", ctx.label.name)
     for obj in objs_to_be_linked:
         print(obj)
 
-    } """ 
+    } """
 
     linker_args = ctx.actions.args()
     if ctx.files.linker_command_file != None:
@@ -164,7 +167,7 @@ y_cc_binary = rule(
         "linker_command_file": attr.label(
             mandatory = False,
             allow_files = True,
-        )
+        ),
     },
     # TODO: Enable the property below.
     # executable = True,

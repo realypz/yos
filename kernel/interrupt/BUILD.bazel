@@ -11,8 +11,8 @@ y_cc_library(
         ":idt.h",
         ":isr.h",
     ],
-    deps = [
-        "//kernel/io:io",
-    ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//kernel/io",
+    ],
 )

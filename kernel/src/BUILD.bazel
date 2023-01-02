@@ -1,0 +1,16 @@
+load("//tool_chains/bazel:c_rules.bzl", "y_cc_binary")
+
+y_cc_binary(
+    name = "kernel",
+    srcs = [
+        ":kernel_entry.asm",
+        ":main.c",
+    ],
+    deps = [
+        "//kernel/devices:keyboard",
+        "//kernel/devices:pic",
+        "//kernel/interrupt:interrupt",
+    ],
+    linker_command_file = "//kernel:linker.ld",
+    visibility = ["//visibility:public"],
+)

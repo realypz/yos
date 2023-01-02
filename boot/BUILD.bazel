@@ -1,0 +1,14 @@
+load("//tool_chains/bazel:c_rules.bzl", "y_cc_binary")
+
+y_cc_binary(
+    name = "bootloader",
+    srcs = [
+        ":boot_sector.asm",
+    ],
+    deps = [
+        ":load_kernel.asm",
+        ":switch_to_long_mode.asm",
+    ],
+    linker_command_file = ":linker.ld",
+    visibility = ["//visibility:public"],
+)

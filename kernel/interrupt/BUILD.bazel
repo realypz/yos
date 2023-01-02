@@ -1,0 +1,18 @@
+load("//tool_chains/bazel:c_rules.bzl", "y_cc_library")
+
+y_cc_library(
+    name = "interrupt",
+    srcs = [
+        ":idt.asm",
+        ":idt.c",
+        ":isr.asm",
+    ],
+    hdrs = [
+        ":idt.h",
+        ":isr.h",
+    ],
+    deps = [
+        "//kernel/io:io",
+    ],
+    visibility = ["//visibility:public"],
+)

@@ -70,10 +70,25 @@ BINARIES = \
 # Concatenate two binary file into one.
 os-image: boot_sector.bin kernel.bin
 	cat ${BINARIES} > ${OUTPUT_DIR}/os-image
-	dd if=${OUTPUT_DIR}/os-image of=${OUTPUT_DIR}/os-image.img bs=512 count=1 conv=notrunc
+	# TODO: dd <...> seems useless, figure out what it is.
+	# dd if=${OUTPUT_DIR}/os-image of=${OUTPUT_DIR}/os-image.img bs=512 count=1 conv=notrunc
 
 run: os-image
-	 qemu-system-x86_64 -fda ${OUTPUT_DIR}/os-image
+	qemu-system-x86_64 -fda ${OUTPUT_DIR}/os-image
+
+####### This section is temporary for bazel debugging. #######
+BINARIES_FROM_BAZEL = \
+	./bazel-bin/boot/bootloader.bin \
+	./bazel-bin/kernel/src/kernel.bin
+
+os-image-from-bazel:
+	bazel build //boot:bootloader //kernel/src:kernel
+	cat ${BINARIES_FROM_BAZEL} > ${OUTPUT_DIR}/os-image-bazel
+
+bazel_run: os-image-from-bazel
+	qemu-system-x86_64 -fda ${OUTPUT_DIR}/os-image-bazel
+
+####### END #######
 
 clean:
 	rm -f ${OUTPUT_DIR}/*

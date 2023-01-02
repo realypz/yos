@@ -1,6 +1,6 @@
-load("//tool_chains/bazel:c_rules.bzl", "yos_c_library")
+load("//tool_chains/bazel:c_rules.bzl", "y_cc_library")
 
-yos_c_library(
+y_cc_library(
     name = "pic",
     srcs = [
         ":pic.c",
@@ -11,7 +11,7 @@ yos_c_library(
     visibility = ["//visibility:public"],
 )
 
-yos_c_library(
+y_cc_library(
     name = "keyboard",
     srcs = [
         ":keyboard.c",

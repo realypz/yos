@@ -1,8 +1,8 @@
-load("//tool_chains/bazel:c_rules.bzl", "yos_c_library")
+load("//tool_chains/bazel:c_rules.bzl", "y_cc_library")
 
-yos_c_library(
+y_cc_library(
     name = "io",
-    srcs = [], # TODO: Add io.asm to the library
+    srcs = [":io.asm"],
     hdrs = [
         ":io.h",
     ],

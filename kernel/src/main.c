@@ -1,7 +1,6 @@
 #include "kernel/devices/keyboard.h"
 #include "kernel/devices/pic.h"
 #include "kernel/interrupt/idt.h"
-#include "kernel/multiply.h"
 
 int main()
 {

@@ -36,3 +36,12 @@ bochs
 
 # You might need to install bochs and other dependencies to run bochs.
 ```
+
+# Comment marker
+This repo currently uses three comment markers.
+
+`NOTE: ` is commented where the code logic is explained with details.
+
+`MISC: ` is commented where the explanation is more of prior knowledge to understand the code, and less related to the code logic itself compared with `NOTE: `.
+
+`TODO: ` is commented where a fix or change will happen in the future.

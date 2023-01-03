@@ -8,7 +8,7 @@ int main()
     init_pic();
     init_keyboard();
 
-    for(;;)
+    for (;;)
     {
         asm("hlt");
     }

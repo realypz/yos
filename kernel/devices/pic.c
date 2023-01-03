@@ -9,14 +9,15 @@ void io_wait()
 
 void init_pic()
 {
-    // Standard ISA IRQs: https://wiki.osdev.org/index.php?title=Interrupts#Standard_ISA_IRQs
+    // Standard ISA IRQs:
+    // https://wiki.osdev.org/index.php?title=Interrupts#Standard_ISA_IRQs
     // https://gist.github.com/Sachin-Tharaka/e1d7ec022a1868c5ad7d1557e3319b0a
-	outb(PIC1_COMMAND_PORT, 0x11);
-	outb(PIC2_COMMAND_PORT, 0x11);
+    outb(PIC1_COMMAND_PORT, 0x11);
+    outb(PIC2_COMMAND_PORT, 0x11);
     io_wait();
 
     outb(PIC1_DATA_PORT, 0x20);
-	outb(PIC2_DATA_PORT, 0x28);
+    outb(PIC2_DATA_PORT, 0x28);
     io_wait();
 
     outb(PIC1_DATA_PORT, 0x04);

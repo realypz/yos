@@ -47,7 +47,10 @@ This repo currently uses three comment markers.
 `TODO: ` is commented where a fix or change will happen in the future.
 
 # Useful commands
-## Bazel buildifier
 ```sh
+# Bazel buildifier
 bazel run //tool_chains/bazel:buildifier
+
+# clang-format
+tool_chains/format/clang-format.sh
 ```

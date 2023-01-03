@@ -49,7 +49,7 @@ This repo currently uses three comment markers.
 # Useful commands
 ```sh
 # Bazel buildifier
-bazel run //tool_chains/bazel:buildifier
+tool_chains/format/bazel-buildifier.sh
 
 # clang-format
 tool_chains/format/clang-format.sh

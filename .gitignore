@@ -2,8 +2,7 @@
 output/
 .debug/
 .log/
-bx_enh_dbg.ini
-
+tmp/
 # Bazel related symlinks
 # git consider symlink as file, not directory
 bazel-bin

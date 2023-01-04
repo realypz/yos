@@ -1,5 +1,7 @@
-ENTRY(kernel_start)
+/* NOTE: Specifying ENTRY can be redundant. */
+/* ENTRY(start) */
 OUTPUT_FORMAT("binary")
+
 kernel_start_address = 0x1000;
 
 SECTIONS

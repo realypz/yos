@@ -1,6 +1,6 @@
 [bits 16]           ; tell assembler that working in real mode(16 bit mode)
-
-%define BOOT_DRIVE 0
+; TODO: Can be removed.
+; %define BOOT_DRIVE 0
 
 %define KERNEL_OFFSET 0x1000 ; This is the memory offset to which we will load our kernel
 
@@ -11,7 +11,8 @@ section .entry
 		jmp 0x0:.FlushCS		  ; Make a far jump to explicitly set CS register to 0x0.
 
 	.FlushCS:              ; start label from where our code starts
-		mov [BOOT_DRIVE], dl	 		; BIOS stores our boot drive in DL, so it 's
+		; TODO: Can be removed.
+		; mov [BOOT_DRIVE], dl	 		; BIOS stores our boot drive in DL, so it 's
 											; best to remember this for later.
 
 		; Initalize segment registers

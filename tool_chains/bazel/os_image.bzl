@@ -1,5 +1,5 @@
 def _y_os_image_impl(ctx):
-    os_image = ctx.actions.declare_file(ctx.attr.name)
+    os_image = ctx.actions.declare_file(ctx.attr.name + ".bin")
 
     ctx.actions.run_shell(
         inputs = ctx.files.bootloader + ctx.files.kernel,
@@ -21,8 +21,9 @@ def _y_os_image_impl(ctx):
     ctx.actions.write(
         exec_script,
         content = """#!/bin/sh
-chmod +rwx $(realpath .)/{os_image_path}
-qemu-system-x86_64 -fda $(realpath .)/{os_image_path}
+OSIMG_ABS_PATH="$(realpath .)/{os_image_path}"
+chmod +rwx $OSIMG_ABS_PATH
+qemu-system-x86_64 -fda $OSIMG_ABS_PATH
 """.format(
             os_image_path = os_image.basename,
         ),

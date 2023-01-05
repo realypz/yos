@@ -12,7 +12,7 @@ cd <repo_root>
 make run
 ```
 The generated files are under directory `<repo_root>/output`.
-**NOTE**: make file is not actively maintained, and under plan of deprecation.
+**NOTE**: make file is not actively maintained. It is still used when the coding in makefile is much easier than bazel.
 
 ## Option 2: via bazel.
 This is the recomended way. Bazel might be unfamiliar to some viewers, and for me as well. Thus, I try to document
@@ -24,10 +24,15 @@ develop the bazel building system.
 # Build the OS image.
 bazel build //:yos
 
-# Build, then run the OS image in QEMU.
+# Build, then run the raw OS image in QEMU. (not recommended)
 bazel run //:yos
+
+# First build via bazel, then make a CD-ROM image, and run this CD-ROM image in QEMU.
+# Recommended
+make bazel_run
 ```
-The generated files are under directory `<repo_root>/bazel-out/k8-fastbuild/bin`.
+The bazel system generates files under directory `<repo_root>/bazel-out/k8-fastbuild/bin`.
+
 
 # Run in bochs
 This feature is pending development, and might be removed in the future.

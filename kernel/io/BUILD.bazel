@@ -3,7 +3,6 @@ load("//support/bazel:c_rules.bzl", "y_cc_library")
 y_cc_library(
     name = "io",
     srcs = [
-        ":io.asm",
         ":io.c",
     ],
     hdrs = [

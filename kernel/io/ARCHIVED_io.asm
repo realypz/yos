@@ -1,9 +1,17 @@
 [bits 64]
 
-global outb
-global inb
+__inb: ; NOTE: This is the absolute minimal inb function.
+    mov rdx, rdi;  di stores the first input arg (port).
+    mov rax, 0
+    in al, dx;  Read byte from I/O port in DX, and stores to AX.
+    ret
 
+global inb
 inb:
+    endbr64
+    push rbp
+    mov rbp, rsp
+
     push rdx
 
     mov rdx, rdi;  di stores the first input arg (port).
@@ -11,8 +19,11 @@ inb:
     in al, dx;  Read byte from I/O port in DX, and stores to AX.
 
     pop rdx
+
+    pop rbp
     ret
 
+global outb
 outb:
     push rax ; TODO(yang.peizheng): Necessasry to push rax?
     push rdx

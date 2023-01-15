@@ -1,11 +1,6 @@
 #include "kernel/devices/pic.h"
 
-#define UNUSED_PORT 0x80
-
-void io_wait()
-{
-    outb(UNUSED_PORT, 0);
-}
+#include "kernel/io/io.h"
 
 void init_pic()
 {

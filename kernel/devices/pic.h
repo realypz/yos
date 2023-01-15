@@ -14,9 +14,6 @@
 #define PIC2_EOI_CODE 0x20
 /// }
 
-/// @brief IO wait function
-void io_wait();
-
 /// @brief Initialize the programmable interrupt controller 8259.
 void init_pic();
 

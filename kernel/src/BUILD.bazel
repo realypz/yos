@@ -1,4 +1,4 @@
-load("//tool_chains/bazel:c_rules.bzl", "y_cc_binary")
+load("//support/bazel:c_rules.bzl", "y_cc_binary")
 
 y_cc_binary(
     name = "kernel",

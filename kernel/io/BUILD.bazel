@@ -1,8 +1,11 @@
-load("//tool_chains/bazel:c_rules.bzl", "y_cc_library")
+load("//support/bazel:c_rules.bzl", "y_cc_library")
 
 y_cc_library(
     name = "io",
-    srcs = [":io.asm"],
+    srcs = [
+        ":io.asm",
+        ":io.c",
+    ],
     hdrs = [
         ":io.h",
     ],

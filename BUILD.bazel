@@ -1,4 +1,4 @@
-load("//tool_chains/bazel:os_image.bzl", "y_os_image")
+load("//support/bazel:os_image.bzl", "y_os_image")
 
 y_os_image(
     name = "yos",

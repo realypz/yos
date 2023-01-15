@@ -7,6 +7,6 @@
 
 /// @brief Interrupt service routine code for keyboard
 /// @return Interrupt return code
-extern uint64_t keyboard_isr();
+uint64_t keyboard_isr();
 
 #endif /* KERNEL_INTERRUPT_ISR */

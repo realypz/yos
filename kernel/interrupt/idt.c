@@ -11,7 +11,7 @@ IDTDescriptor idt_descriptor = {sizeof(idt) - 1, idt};
 /// @brief Load the interrupt descriptor table.
 /// @details This function's detailed
 /// implementation is in assembly code.
-extern void __attribute__((cdecl)) load_idt_impl(IDTDescriptor *);
+void __attribute__((cdecl)) load_idt_impl(IDTDescriptor *);
 
 void init_idt()
 {

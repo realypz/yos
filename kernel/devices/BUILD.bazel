@@ -1,4 +1,4 @@
-load("//tool_chains/bazel:c_rules.bzl", "y_cc_library")
+load("//support/bazel:c_rules.bzl", "y_cc_library")
 
 y_cc_library(
     name = "pic",
@@ -9,6 +9,9 @@ y_cc_library(
         ":pic.h",
     ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//kernel/io",
+    ],
 )
 
 y_cc_library(

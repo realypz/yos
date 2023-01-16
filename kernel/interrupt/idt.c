@@ -9,9 +9,16 @@ IDTEntry64 idt[NUM_IDT_ENTRIES];
 IDTDescriptor idt_descriptor = {sizeof(idt) - 1, idt};
 
 /// @brief Load the interrupt descriptor table.
-/// @details This function's detailed
-/// implementation is in assembly code.
-void __attribute__((cdecl)) load_idt_impl(IDTDescriptor *);
+/// @details The assembly version is in `kernel/interrupt/ARCHIVED_idt.asm`.
+void __attribute__((cdecl)) load_idt_impl(IDTDescriptor *)
+{
+    __asm__("mov %%rdi, %%rax;" // MISC: rdi stores the first argument in x86_64 linux calling convention.
+            "lidt (%%rax);"
+            "sti"
+            :
+            :
+            : "rdx");
+}
 
 void init_idt()
 {

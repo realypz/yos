@@ -6,7 +6,7 @@ When you browse this repo
 # How to run simulation?
 At the very begining, clone this repo to a Linux environment. My development environment is WSL2 on Windows 11.
 The built OS image is run on QEMU for testing purpose. It has never been tested on a real hardware.
-## Option 1: via makefile.
+## Option 1: Purely via makefile.
 ```bash
 cd <repo_root>
 make run
@@ -14,7 +14,7 @@ make run
 The generated files are under directory `<repo_root>/output`.
 **NOTE**: make file is not actively maintained. It is still used when the coding in makefile is much easier than bazel.
 
-## Option 2: via bazel.
+## Option 2: Purely via bazel.
 This is the recomended way. Bazel might be unfamiliar to some viewers, and for me as well. Thus, I try to document
 detailed comments when I write my own bazel rules for everyone's convenience. And my current plan is to further
 develop the bazel building system.
@@ -24,11 +24,15 @@ develop the bazel building system.
 # Build the OS image.
 bazel build //:yos
 
-# Build, then run the raw OS image in QEMU. (not recommended)
+# Build, then run the raw OS image in QEMU.
+# Due to the sandbox of bazel, this command is not recommended.
 bazel run //:yos
-
-# First build via bazel, then make a CD-ROM image, and run this CD-ROM image in QEMU.
-# Recommended
+```
+## Option 3: Via bazel + makefile.
+```bash
+# This command invokes `bazel build //:yos` first,
+# then make a CD-ROM image via a python script, and run this CD-ROM image in QEMU.
+# ✔✔✔✔✔✔ Recommended ✔✔✔✔✔✔
 make bazel_run
 ```
 The bazel system generates files under directory `<repo_root>/bazel-out/k8-fastbuild/bin`.
@@ -54,8 +58,8 @@ This repo currently uses three comment markers.
 # Useful commands
 ```sh
 # Bazel buildifier
-tool_chains/format/bazel-buildifier.sh
+support/format/bazel-buildifier.sh
 
 # clang-format
-tool_chains/format/clang-format.sh
+support/format/clang-format.sh
 ```

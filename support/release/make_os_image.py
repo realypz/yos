@@ -2,7 +2,7 @@
 
 # How to run
 """
-./tool_chains/bazel/make_os_image.py \
+<dirs...>/make_os_image.py \
     --bootloader-binary bazel-bin/boot/bootloader.bin \
     --kernel-binary bazel-bin/kernel/src/kernel.bin\
     --output-dir ./tmp2

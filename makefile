@@ -81,7 +81,7 @@ BINARIES_FROM_BAZEL = \
 	./bazel-bin/kernel/src/kernel.bin
 
 os-image-from-bazel:
-	bazel build //boot:bootloader //kernel/src:kernel
+	bazel build --config=default_config //boot:bootloader //kernel/src:kernel
 	./support/release/make_os_image.py \
     	--bootloader-binary bazel-bin/boot/bootloader.bin \
     	--kernel-binary bazel-bin/kernel/src/kernel.bin\

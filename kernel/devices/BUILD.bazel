@@ -1,4 +1,4 @@
-load("//support/bazel:c_rules.bzl", "y_cc_library")
+load("//support/bazel/compilers:c_rules.bzl", "y_cc_library")
 
 y_cc_library(
     name = "pic",

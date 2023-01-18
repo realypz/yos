@@ -6,16 +6,6 @@ NASM_PATH = "/usr/bin/nasm"
 NASM_DEFAULT_ARGS = ["-f", "elf64"]
 ASSEMBLY_CODE_EXTENSIONS = ["asm"]
 
-GCC_PATH = "/usr/bin/gcc"
-GCC_DEFAULT_ARGS = [
-    "-fno-PIE",
-    "-Wextra",
-    "-Wall",
-    "-ffreestanding",
-    "-I./",
-    "-c",  # MISC: Compile or assemble the source files, but do not link.
-    # https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html
-]
 C_CODE_EXTENSIONS = ["cpp", "c"]
 
 # The implementation fo y_cc_library
@@ -33,6 +23,12 @@ def _yos_c_library_impl(ctx):
     # ctx.actions.declare_file declares the placeholder for the file to
     # be generated.
 
+    # MISC: This is a critical line which will resolve to toolchain when the target is built.
+    #       `.ctoolchaininfo` is generated in `def _c_toolchain_impl(ctx):` by `ctoolchaininfo = ...`.
+    info = ctx.toolchains["//support/bazel/toolchains:c_toolchain_type"].ctoolchaininfo
+
+    # info is a struct with the field defined by provider `CToolchainInfo`.
+    # print(info)
     for src_file, obj_file in object_files_map.items():
         # MISC:
         # ctx.actions.run execute the compilation command.
@@ -41,8 +37,8 @@ def _yos_c_library_impl(ctx):
             ctx.actions.run(
                 inputs = [src_file] + ctx.files.hdrs + ctx.files.deps,
                 outputs = [obj_file],
-                executable = GCC_PATH,
-                arguments = GCC_DEFAULT_ARGS + [src_file.path] + ["-o", obj_file.path],
+                executable = info.compiler_path,
+                arguments = info.compiler_args + [src_file.path] + ["-o", obj_file.path],
             )
         elif src_file.extension in ASSEMBLY_CODE_EXTENSIONS:
             ctx.actions.run(
@@ -63,30 +59,39 @@ def _yos_c_library_impl(ctx):
     # Why add ctx.files.hdrs in the depset?
     # This will allow another library to depend on the header files from this library.
 
+# TODO: https://bazel.build/docs/configurable-attributes
+#       is what I need to customize the bazel build --<name>=<arg> ...
+# TODO: https://bazel.build/docs/user-manual#target-syntax
+# TODO: https://bazel.build/extending/aspects
+# config_setting(
+#     name = "arm_build",
+#     values = {"cpu": "arm"},
+# )
+
 y_cc_library = rule(
     implementation = _yos_c_library_impl,
     attrs = {
-        # NOTE: Allowed types: *.c, *.cpp, *.asm
         "srcs": attr.label_list(
             mandatory = True,
-            allow_files = True,
+            allow_files = [".c", ".cpp", ".asm"],
         ),
         # Purpose of hdrs:
         # 1. Make the hdrs are foundable when the compilation command is executed
         #    sand box.
         # 2. hdrs are exposed as part of the library output files.
         #
-        # NOTE: Allowed types: *.h, *.asm
         "hdrs": attr.label_list(
             # When you want multiple files, use attr.label_list.
             mandatory = True,
-            allow_files = True,
+            allow_files = [".h", ".asm"],
         ),
         "deps": attr.label_list(
             mandatory = False,
             allow_files = True,
         ),
     },
+    # NOTE: This is a critical line which will resolve to toolchain when the target is built.
+    toolchains = ["//support/bazel/toolchains:c_toolchain_type"],
     executable = False,
 )
 
@@ -103,6 +108,7 @@ def _y_cc_binary_impl(ctx):
         if file.extension == ELF_EXTENSION
     ]
 
+    info = ctx.toolchains["//support/bazel/toolchains:c_toolchain_type"].ctoolchaininfo
     for src_file in ctx.files.srcs:
         if src_file.extension in ASSEMBLY_CODE_EXTENSIONS + C_CODE_EXTENSIONS:
             obj_file = ctx.actions.declare_file(src_file.basename + "." + ELF_EXTENSION)
@@ -110,8 +116,8 @@ def _y_cc_binary_impl(ctx):
                 ctx.actions.run(
                     inputs = [src_file] + ctx.files.srcs + ctx.files.deps,
                     outputs = [obj_file],
-                    executable = GCC_PATH,
-                    arguments = GCC_DEFAULT_ARGS + [src_file.path] + ["-o", obj_file.path],
+                    executable = info.compiler_path,
+                    arguments = info.compiler_args + [src_file.path] + ["-o", obj_file.path],
                 )
             else:
                 # src_file.extension in ASSEMBLY_CODE_EXTENSIONS:
@@ -169,6 +175,7 @@ y_cc_binary = rule(
             allow_files = True,
         ),
     },
+    toolchains = ["//support/bazel/toolchains:c_toolchain_type"],
     # TODO: Enable the property below.
     # executable = True,
 )

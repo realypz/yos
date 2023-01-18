@@ -1,0 +1,51 @@
+load("//support/bazel/toolchains:c_toolchain.bzl", "c_toolchain")
+
+toolchain_type(name = "c_toolchain_type")
+
+# NOTE: This is still a rule, not a callable toolchain target.
+#       You should use `c_linux_toolchain` with the kind `toolchain`.
+c_toolchain(
+    name = "_c_linux_toolchain_args",
+    arch_flags = [
+        "--arch=Linux",
+        "--debug_everything",
+    ],
+    compiler_args = [
+        "-fno-PIE",
+        "-Wextra",
+        "-Wall",
+        "-ffreestanding",
+        "-I./",
+        "-c",  # MISC: Compile or assemble the source files, but do not link.
+        # https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html
+    ],
+    compiler_path = "/usr/bin/gcc",
+    system_lib = "/usr/lib/libbarc.so",
+)
+
+toolchain(
+    name = "c_linux_toolchain",
+    exec_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    toolchain = ":_c_linux_toolchain_args",
+    toolchain_type = "c_toolchain_type",
+)
+
+platform(
+    name = "x86_64_linux",
+    constraint_values = [
+        "@platforms//os:linux",
+    ],
+)
+
+# Test the toolchains:
+"""
+bazel build <target> \
+  --extra_toolchains=//support/bazel/toolchains:c_linux_toolchain
+  --platforms=//support/bazel/toolchains:x86_64_linux
+
+bazel build <target> \
+    --extra_toolchains=//support/bazel/toolchains:c_linux_toolchain
+"""

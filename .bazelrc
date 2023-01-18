@@ -1,0 +1,5 @@
+# The lines below define the args (e.g. toolchains) in the building command.
+# Example
+# bazel build --config=default_config <target>
+
+build:default_config --extra_toolchains=//support/bazel/toolchains:c_linux_toolchain

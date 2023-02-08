@@ -3,5 +3,5 @@ load("//support/bazel:os_image.bzl", "y_os_image")
 y_os_image(
     name = "yos",
     bootloader = "//boot:bootloader",
-    kernel = "//kernel/src:kernel",
+    kernel = "//kernel/main:kernel",
 )

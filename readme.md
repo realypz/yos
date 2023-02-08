@@ -6,15 +6,7 @@ When you browse this repo
 # How to run simulation?
 At the very begining, clone this repo to a Linux environment. My development environment is WSL2 on Windows 11.
 The built OS image is run on QEMU for testing purpose. It has never been tested on a real hardware.
-## Option 1: Purely via makefile.
-```bash
-cd <repo_root>
-make run
-```
-The generated files are under directory `<repo_root>/output`.
-**NOTE**: make file is not actively maintained. It is still used when the coding in makefile is much easier than bazel.
-
-## Option 2: Purely via bazel.
+## Option 1: Purely via bazel.
 This is the recomended way. Bazel might be unfamiliar to some viewers, and for me as well. Thus, I try to document
 detailed comments when I write my own bazel rules for everyone's convenience. And my current plan is to further
 develop the bazel building system.
@@ -28,7 +20,7 @@ bazel build //:yos
 # Due to the sandbox of bazel, this command is not recommended.
 bazel run //:yos
 ```
-## Option 3: Via bazel + makefile.
+## Option 2: Via bazel + makefile.
 ```bash
 # This command invokes `bazel build //:yos` first,
 # then make a CD-ROM image via a python script, and run this CD-ROM image in QEMU.

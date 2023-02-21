@@ -2,10 +2,6 @@
 
 %define PAGE_PRESENT    (1 << 0)
 %define PAGE_WRITE      (1 << 1)
- 
-%define CODE_SEG     0x0008
-%define DATA_SEG     0x0010
-
 
 section .text
 ALIGN 4
@@ -94,16 +90,18 @@ SwitchToLongMode:
 
    lgdt [GDT.Pointer]                ; Load GDT.Pointer defined below.
 
-   jmp CODE_SEG:LongMode             ; Load CS with 64 bit segment and flush the instruction cache
+   jmp GDT.Code:LongMode             ; Load CS with 64 bit segment and flush the instruction cache
 
 
 [bits 16]
 GDT:
-.Null:
+.Null: equ $ - GDT
     dq 0x0000000000000000             ; Null Descriptor - should be present.
  
-.Code:
+.Code: equ $ - GDT
     dq 0x00209A0000000000             ; 64-bit code descriptor (exec/read).
+
+.Data: equ $ - GDT
     dq 0x0000920000000000             ; 64-bit data descriptor (read/write).
  
 ALIGN 4
@@ -114,9 +112,9 @@ ALIGN 4
     dd GDT                            ; 32-bit Base Address of GDT. (CPU will zero extend to 64-bit)
 
 
-[bits 64]      
+[bits 64]
 LongMode:
-    mov ax, DATA_SEG
+    mov ax, GDT.Data
     mov ds, ax
     mov es, ax
     mov fs, ax

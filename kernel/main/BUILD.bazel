@@ -9,6 +9,7 @@ y_cc_binary(
     linker_command_file = "//kernel:linker.ld",
     visibility = ["//visibility:public"],
     deps = [
+        "//kernel/arch/x86:gdt",
         "//kernel/devices:keyboard",
         "//kernel/devices:pic",
         "//kernel/interrupt",

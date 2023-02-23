@@ -97,16 +97,17 @@ SwitchToLongMode:
 GDT:
 .Null: equ $ - GDT
     dq 0x0000000000000000             ; Null Descriptor - should be present.
- 
-.Code: equ $ - GDT
-    dq 0x00209A0000000000             ; 64-bit code descriptor (exec/read).
 
+.Code: equ $ - GDT
+    dq 0x00209A0000000000             ; 64-bit, code descriptor (exec/read) with privilege level 0.
+                                      ; D=0, L=1, P=1, DPL=0, C=0
 .Data: equ $ - GDT
     dq 0x0000920000000000             ; 64-bit data descriptor (read/write).
- 
+    ; TODO: Add system call used code descriptor. For kernel mode and user mode.
+
 ALIGN 4
     dw 0                              ; Padding to make the "address of the GDT" field aligned on a 4-byte boundary
- 
+
 .Pointer:
     dw $ - GDT - 1                    ; 16-bit Size (Limit) of GDT.
     dd GDT                            ; 32-bit Base Address of GDT. (CPU will zero extend to 64-bit)
@@ -114,13 +115,14 @@ ALIGN 4
 
 [bits 64]
 LongMode:
+    ; // TODO: Looks like these lines can be commented out???
     mov ax, GDT.Data
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
- 
+
     ; Blank out the screen to a blue color.
     mov edi, 0xB8000
     mov rcx, 500                      ; Since we are clearing uint64_t over here, we put the count as Count/4.

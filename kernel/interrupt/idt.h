@@ -23,7 +23,7 @@ typedef struct
 
     /// Starting address of Interrupt desriptor table.
     IDTEntry64 *base;
-} __attribute__((packed)) IDTDescriptor; /// Meta info of the interrupt desriptor table.
+} __attribute__((packed)) DescriptorPtr; /// Meta info of the interrupt desriptor table.
 
 /// @brief Initialize interrupt descriptor table.
 /// @details Including set the interrupt service routine function address,

@@ -1,0 +1,33 @@
+load("//support/bazel/compilers:c_rules.bzl", "y_cc_library")
+
+y_cc_library(
+    name = "msr",
+    srcs = [
+        "msr.c",
+    ],
+    hdrs = [
+        "msr.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [],
+)
+
+y_cc_library(
+    name = "gdt",
+    srcs = [
+        "gdt.c",
+    ],
+    hdrs = [
+        "gdt.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [":segments"],
+)
+
+y_cc_library(
+    name = "segments",
+    srcs = [],
+    hdrs = ["segments.h"],
+    visibility = ["//visibility:public"],
+    deps = [],
+)

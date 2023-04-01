@@ -55,7 +55,7 @@ void init_keyboard()
 // https://www.youtube.com/watch?v=QRhFo-CnpvQ&t=452s
 void keyboard_isr_handler()
 {
-    static uint8_t *video_memory = (uint8_t *)0xb8000;
+    static uint8_t* video_memory = (uint8_t*)0xb8000;
     unsigned char status = inb(KEYBOARD_STATUS_PORT);
 
     if (status & 0x1)

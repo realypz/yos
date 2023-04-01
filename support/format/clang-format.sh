@@ -4,4 +4,4 @@
 #       to be formatted.
 #       Thus, `.clang-format` is enforced to locate at the repo root.
 # Read https://releases.llvm.org/3.6.0/tools/clang/docs/ClangFormatStyleOptions.html
-find . -iname *.h -o  -iname *.c | xargs clang-format -i -style=file
+find . -iname *.h -o -iname *.hpp -o -iname *.c -o -iname *.cpp | xargs clang-format -i -style=file

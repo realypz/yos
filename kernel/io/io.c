@@ -33,8 +33,10 @@ void outb(uint16_t port, uint8_t data)
 {
     __asm__("push %%rax;"
             "push %%rdx;"
-            "mov %%rdi, %%rdx;" // MISC: rdi stores the first arg `port` in x86_64 Linux calling convention.
-            "mov %%rsi, %%rax;" // MISC: rsi stores the second arg `data` in x86_64 Linux calling convention.
+            "mov %%rdi, %%rdx;" // MISC: rdi stores the first arg `port` in x86_64 Linux calling
+                                // convention.
+            "mov %%rsi, %%rax;" // MISC: rsi stores the second arg `data` in x86_64 Linux calling
+                                // convention.
             "out %%al, %%dx;"
             "pop %%rdx;"
             "pop %%rax;"
